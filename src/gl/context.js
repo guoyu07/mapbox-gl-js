@@ -34,7 +34,10 @@ const {
 
 
 import type {TriangleIndexArray, LineIndexArray} from '../data/index_array_type';
-import type {StructArray} from '../util/struct_array';
+import type {
+    StructArray,
+    StructArrayMember
+} from '../util/struct_array';
 import type {
     BlendFuncType,
     ColorMaskType,
@@ -124,8 +127,8 @@ class Context {
         return new IndexBuffer(this, array, dynamicDraw);
     }
 
-    createVertexBuffer(array: StructArray, dynamicDraw?: boolean) {
-        return new VertexBuffer(this, array, dynamicDraw);
+    createVertexBuffer(array: StructArray, attributes: $ReadOnlyArray<StructArrayMember>, dynamicDraw?: boolean) {
+        return new VertexBuffer(this, array, attributes, dynamicDraw);
     }
 
     clear({color, depth}: ClearArgs) {
