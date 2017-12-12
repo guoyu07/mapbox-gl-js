@@ -22,12 +22,6 @@ import type {Callback} from '../types/callback';
 import type Context from '../gl/context';
 import type VertexBuffer from '../gl/vertex_buffer';
 
-export type ImageTextureSource =
-  ImageData |
-  HTMLImageElement |
-  HTMLCanvasElement |
-  HTMLVideoElement;
-
 /**
  * A data source containing an image.
  * (See the [Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#sources-image) for detailed documentation of options.)
@@ -191,7 +185,7 @@ class ImageSource extends Evented implements Source {
         this._prepareImage(this.map.painter.context, this.image);
     }
 
-    _prepareImage(context: Context, image: ImageTextureSource, resize?: boolean) {
+    _prepareImage(context: Context, image: ImageData | HTMLVideoElement | HTMLCanvasElement, resize?: boolean) {
         const gl = context.gl;
         if (!this.boundsBuffer) {
             this.boundsBuffer = context.createVertexBuffer(this._boundsArray);
@@ -207,7 +201,7 @@ class ImageSource extends Evented implements Source {
             this.texture.bind(gl.LINEAR, gl.CLAMP_TO_EDGE);
         } else if (resize) {
             this.texture.update(image);
-        } else if (image instanceof window.HTMLVideoElement || image instanceof window.ImageData || image instanceof window.HTMLCanvasElement) {
+        } else if (image instanceof window.HTMLVideoElement || image instanceof window.HTMLCanvasElement) {
             this.texture.bind(gl.LINEAR, gl.CLAMP_TO_EDGE);
             gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, image);
         }
